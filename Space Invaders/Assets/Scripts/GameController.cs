@@ -9,15 +9,36 @@ public class GameController : MonoBehaviour
 	[SerializeField]
 	private Vector3 spawnValues;
 
+	[SerializeField]
+	private int hazardCount;
+
+	[SerializeField]
+	private float spawnWait;
+
+	[SerializeField]
+	private float startWait;
+
+	[SerializeField]
+	private float waveWait;
+
 	void Start()
 	{
-		SpawnWaves ();
+		StartCoroutine (SpawnWaves ());
 	}
 
-	void SpawnWaves()
+	IEnumerator SpawnWaves()
 	{
-		Vector3 spawnPosition = new Vector3 (Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
-		Quaternion spawnRotation = Quaternion.identity;
-		Instantiate (hazard, spawnPosition, spawnRotation);
+		yield return new WaitForSeconds(startWait);
+		while(true)
+		{
+			for (int i=0; i<hazardCount; i++) 
+			{
+				Vector3 spawnPosition = new Vector3 (Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+				Quaternion spawnRotation = Quaternion.identity;
+				Instantiate (hazard, spawnPosition, spawnRotation);
+				yield return new WaitForSeconds(spawnWait);
+			}
+		}
+		yield return new WaitForSeconds(waveWait);
 	}
 }
