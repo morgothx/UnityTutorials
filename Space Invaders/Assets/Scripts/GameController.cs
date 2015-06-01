@@ -24,13 +24,37 @@ public class GameController : MonoBehaviour
 	[SerializeField]
 	private GUIText scoreText;
 
+	[SerializeField]
+	private GUIText restartText;
+
+	[SerializeField]
+	private GUIText gameOverText;
+
 	private int score;
+	private bool gameOver;
+	private bool restart;
 
 	void Start()
 	{
-		score = 0;
+		Initialize ();
 		UpdateScore ();
 		StartCoroutine (SpawnWaves ());
+	}
+
+	void Update()
+	{
+		if (restart)
+		if (Input.GetKey (KeyCode.R))
+			Application.LoadLevel (Application.loadedLevel);
+	}
+
+	private void Initialize ()
+	{
+		gameOver = false;
+		restart = false;
+		restartText.text = "";
+		gameOverText.text = "";
+		score = 0;
 	}
 
 	public void AddScore (int newScoreValue)
@@ -52,11 +76,28 @@ public class GameController : MonoBehaviour
 				yield return new WaitForSeconds(spawnWait);
 			}
 			yield return new WaitForSeconds(waveWait);
+			checkRestart();
+		}
+	}
+
+	private void checkRestart()
+	{
+		if (gameOver) 
+		{
+			restartText.text = "Press 'R' for Restart";
+			restart = true;
+			return;
 		}
 	}
 
 	private void UpdateScore()
 	{
 		scoreText.text = "Score: " + score;
+	}
+
+	public void GameOver()
+	{
+		gameOverText.text = "Game Over!";
+		gameOver = true;
 	}
 }

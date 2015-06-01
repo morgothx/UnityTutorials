@@ -35,7 +35,10 @@ public class DestroyByContact : MonoBehaviour
 	private void explode(Collider other)
 	{
 		Instantiate(explosion, transform.position, transform.rotation);
-		if(other.tag == "Player")
+		if (other.tag == "Player") 
+		{
 			Instantiate(playerExplosion, transform.position, transform.rotation);
+			gameController.GameOver();
+		}
 	}
 }
