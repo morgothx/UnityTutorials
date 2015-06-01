@@ -21,9 +21,22 @@ public class GameController : MonoBehaviour
 	[SerializeField]
 	private float waveWait;
 
+	[SerializeField]
+	private GUIText scoreText;
+
+	private int score;
+
 	void Start()
 	{
+		score = 0;
+		UpdateScore ();
 		StartCoroutine (SpawnWaves ());
+	}
+
+	public void AddScore (int newScoreValue)
+	{
+		score += newScoreValue;
+		UpdateScore ();
 	}
 
 	IEnumerator SpawnWaves()
@@ -38,7 +51,12 @@ public class GameController : MonoBehaviour
 				Instantiate (hazard, spawnPosition, spawnRotation);
 				yield return new WaitForSeconds(spawnWait);
 			}
+			yield return new WaitForSeconds(waveWait);
 		}
-		yield return new WaitForSeconds(waveWait);
+	}
+
+	private void UpdateScore()
+	{
+		scoreText.text = "Score: " + score;
 	}
 }
